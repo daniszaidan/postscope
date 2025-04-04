@@ -11,14 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'https://jsonplaceholder.typicode.com/posts'
       );
       postsData = await response.json();
-      console.log(postsData);
       renderPosts(postsData);
     } catch (error) {
-      if (error.name === 'AbortError') {
-        console.error('Request timed out.');
-      } else {
-        console.error('Error fetching posts:', error);
-      }
+      console.error('Error fetching posts:', error);
     }
   };
 
@@ -63,10 +58,65 @@ document.addEventListener('DOMContentLoaded', () => {
       buttonCell.appendChild(button);
       row.appendChild(buttonCell);
 
-      fragment.appendChild(row);
+      // Comments row (hidden by default)
+      const commentRow = document.createElement('tr');
+      commentRow.classList.add('comment-row', 'hidden');
+      const commentCell = document.createElement('td');
+      commentCell.setAttribute('colspan', 4);
+      commentCell.textContent = 'Loading comments...';
+      commentRow.appendChild(commentCell);
+
+      postsTable.appendChild(row);
+      postsTable.appendChild(commentRow);
+
+      button.addEventListener('click', () => {
+        if (commentRow.classList.contains('hidden')) {
+          commentRow.classList.remove('hidden');
+          commentRow.classList.add('visible');
+          fetchComments(post.id, commentCell);
+          button.textContent = 'Hide';
+        } else {
+          commentRow.classList.remove('visible');
+          commentRow.classList.add('hidden');
+          button.textContent = 'View';
+        }
+      });
     });
 
     postsTable.appendChild(fragment);
+  };
+
+  const fetchComments = async (postId, row) => {
+    try {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/posts/${postId}/comments`
+      );
+      const comments = await response.json();
+      renderComments(comments, row, postId);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
+  };
+
+  const renderComments = (comments, commentCell, postId) => {
+    commentCell.innerHTML = '';
+    if (comments.length === 0) {
+      commentCell.textContent = 'No comments available.';
+      return;
+    }
+
+    const ul = document.createElement('ul');
+    comments.forEach((comment) => {
+      const li = document.createElement('li');
+      li.textContent = `${comment.name}: ${comment.body}`;
+      ul.appendChild(li);
+    });
+    commentCell.appendChild(ul);
+
+    // Set the height of the row based on content
+    const commentRow = commentCell.closest('tr');
+    const contentHeight = commentRow.scrollHeight;
+    commentRow.style.maxHeight = `${contentHeight}px`;
   };
 
   searchInput.addEventListener('input', () => {
