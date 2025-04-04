@@ -27,11 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     posts.forEach((post) => {
       const row = document.createElement('tr');
 
-      // ID
-      const idCell = document.createElement('td');
-      idCell.textContent = post.id;
-      row.appendChild(idCell);
-
       // Title
       const titleCell = document.createElement('td');
       titleCell.textContent = post.title;
@@ -99,11 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const renderComments = (comments, commentCell, postId) => {
-    commentCell.innerHTML = '';
+    while (commentCell.firstChild) {
+      commentCell.removeChild(commentCell.firstChild);
+    }
+
     if (comments.length === 0) {
-      commentCell.textContent = 'No comments available.';
+      const noCommentsText = document.createTextNode('No comments available.');
+      commentCell.appendChild(noCommentsText);
       return;
     }
+
+    const heading = document.createElement('h3');
+    heading.textContent = 'Comments';
+    commentCell.appendChild(heading);
 
     const ul = document.createElement('ul');
     comments.forEach((comment) => {
@@ -111,9 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
       li.textContent = `${comment.name}: ${comment.body}`;
       ul.appendChild(li);
     });
+
     commentCell.appendChild(ul);
 
-    // Set the height of the row based on content
     const commentRow = commentCell.closest('tr');
     const contentHeight = commentRow.scrollHeight;
     commentRow.style.maxHeight = `${contentHeight}px`;
