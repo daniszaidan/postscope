@@ -16,21 +16,29 @@
         </div>
       </nav>
 
-      <h1>Reports</h1>
-      <div id="loading">Loading...</div>
-      <div id="error">Failed to load data.</div>
+      <div class="content" id="content">
+        <h1>
+          Number of posts containing <br />
+          the word <span class="highlight">"rerum"</span> in the body:
+          <span id="rerumCountText">0</span>
+        </h1>
+        <div id="loading">Loading...</div>
+        <div id="error">Failed to load data.</div>
 
-      <p id="rerumCountText"></p>
+        <div class="table-header">
+          <h2>User Reports</h2>
+        </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>Post Count</th>
-          </tr>
-        </thead>
-        <tbody id="userReportBody"></tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Post Count</th>
+            </tr>
+          </thead>
+          <tbody id="userReportBody"></tbody>
+        </table>
+      </div>
     </div>
 
     <script src="js/report.js"></script>

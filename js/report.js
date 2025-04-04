@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const rerumCount = posts.filter((post) =>
         post.body.includes('rerum')
       ).length;
-      rerumCountText.textContent = `Number of posts containing the word "rerum" in the body: ${rerumCount}`;
+      rerumCountText.textContent = rerumCount;
 
       const userMap = new Map();
       posts.forEach((post) => {
